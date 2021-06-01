@@ -1,5 +1,10 @@
 # ApiGo
 
-APIGO=quay-enterprise-quay-quay-enterprise.apps.ocppaz0.ar.bsch/a309788/apigo:1
+Simple example of an API in `golang` that counts every hit
+
+# Build and push
+```=bash
+APIGO=quay.io/agustinlare/apigo
 docker build -t $APIGO .
 docker push $APIGO
+```
