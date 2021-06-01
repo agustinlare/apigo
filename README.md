@@ -1,6 +1,6 @@
 # ApiGo
 
-Simple example of an API in `golang` that counts every hit
+A simple API in `golang` that counts every hit
 
 # Build and push
 ```=bash
