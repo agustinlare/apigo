@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
+	"time"
 )
 
 func homePage(w http.ResponseWriter, r *http.Request) {
@@ -22,16 +24,16 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	os.Setenv("COUNTER_HIT_GOLANG", newValue)
 	fmt.Println("Endpoint Hit: homePage", newValue)
 
-	// if strings.Contains(newValue, "100") {
-	// 	time.Sleep(5 * time.Second)
-	// 	fmt.Println("Endpoint Hit by 5: homePage", newValue)
-	// } else if strings.Contains(newValue, "40") {
-	// 	time.Sleep(2 * time.Second)
-	// 	fmt.Println("Endpoint Hit by 2: homePage", newValue)
-	// } else {
-	// 	time.Sleep(2 * time.Second)
-	// 	fmt.Println("Endpoint Hit by 0: homePage", newValue)
-	// }
+	if strings.Contains(newValue, "100") {
+		time.Sleep(5 * time.Second)
+		fmt.Println("Endpoint Hit by 5: homePage", newValue)
+	} else if strings.Contains(newValue, "40") {
+		time.Sleep(2 * time.Second)
+		fmt.Println("Endpoint Hit by 2: homePage", newValue)
+	} else {
+		time.Sleep(2 * time.Second)
+		fmt.Println("Endpoint Hit by 0: homePage", newValue)
+	}
 
 }
 
