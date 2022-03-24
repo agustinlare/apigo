@@ -3,9 +3,36 @@
 A simple API in `golang` that counts every hit.
 
 ## Endpoints
-+ `/health`: Status 200, `{"endpoint":"checklist","ip":"172.17.0.1:57582","counter":1,"status":200,"message":"health"}`
-+ `/unhealthy`: Status 500, `{"endpoint":"checklist","ip":"172.17.0.1:57582","counter":1,"status":500,"message":"cof...cof"}`
-+ `/ping`: Status 200, `{"endpoint":"checklist","ip":"172.17.0.1:57582","counter":1,"status":200,"message":"pong"}`
++ `/health`: Status 200
+```
+{
+  "endpoint": "checklist",
+  "ip": "172.17.0.1:57582",
+  "counter": 1,
+  "status": 200,
+  "message": "health"
+}
+```
++ `/unhealthy`: Status 500
+```
+{
+  "endpoint": "checklist",
+  "ip": "172.17.0.1:57582",
+  "counter": 1,
+  "status": 500,
+  "message": "cof...cof"
+}
+```
++ `/ping`: Status 200
+```
+{
+  "endpoint": "checklist",
+  "ip": "172.17.0.1:57582",
+  "counter": 1,
+  "status": 200,
+  "message": "pong"
+}
+```
 + `/checklist`: Status 200, front 
 
 ### Front `/checklist`
