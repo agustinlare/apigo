@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"runtime"
@@ -76,5 +76,5 @@ func responder(w http.ResponseWriter, r *http.Request, b bool, s string) {
 	mapB, _ := json.Marshal(mapD)
 
 	w.Write(mapB)
-	fmt.Println(string(mapB))
+	log.Println(string(mapB))
 }
