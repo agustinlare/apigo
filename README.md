@@ -3,14 +3,14 @@
 A simple API in `golang` that counts every hit.
 
 ## Endpoints
-+ `/health`: Status 200
++ `/health`: Status and message dependes on env.HEALTCHECK_STATUS
 ```
 {
   "endpoint": "checklist",
   "ip": "172.17.0.1:57582",
   "counter": 1,
   "status": 200,
-  "message": "health"
+  "message": "true"
 }
 ```
 + `/unhealthy`: Status 500
