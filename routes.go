@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -29,7 +30,7 @@ func ping(w http.ResponseWriter, r *http.Request) {
 }
 
 func front(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "./static/index.html")
+	http.ServeFile(w, r, "./static/index2.html")
 	responder(w, r, true, "front")
 }
 
@@ -43,7 +44,14 @@ func switcher(w http.ResponseWriter, r *http.Request) {
 }
 
 func checker(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+	err := r.ParseForm()
+
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	fmt.Println(r.Form)
+	fmt.Println(r.FormValue("ipcheck"), "asd")
 
 	if len(r.Form["ipcheck"][0]) > 0 {
 		reply, err := connReach(r.Form["ipcheck"][0])
