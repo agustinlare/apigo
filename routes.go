@@ -1,77 +1,80 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
+	"runtime"
 	"strconv"
+	"strings"
 )
 
-func health(w http.ResponseWriter, r *http.Request) {
-	boolValue, err := strconv.ParseBool(os.Getenv("HEALTCHECK_STATUS"))
-	if err != nil {
-		log.Println(err)
+type response struct {
+	Endpoint string `json:"endpoint"`
+	Ip       string `json:"ip"`
+	Counter  int    `json:"counter"`
+	Status   int    `json:"status"`
+	Message  string `json:"message"`
+}
+
+func get_ip(r *http.Request) string {
+	forwarded := r.Header.Get("X-FORWARDED-FOR")
+
+	if forwarded != "" {
+		return forwarded
 	}
 
-	if boolValue {
-		responder(w, r, true, "true")
-	} else {
-		responder(w, r, false, "false")
-	}
+	return r.RemoteAddr
 }
 
-func unhealthy(w http.ResponseWriter, r *http.Request) {
-	responder(w, r, false, "cof...cof")
-}
-
-func ping(w http.ResponseWriter, r *http.Request) {
-	responder(w, r, true, "pong")
-}
-
-func front(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "./static/index.html")
-	responder(w, r, true, "front")
-}
-
-func switcher(w http.ResponseWriter, r *http.Request) {
-	reply, err := switchHealth()
-	responder(w, r, true, reply)
+func hit_counter(endpoint string) int {
+	flag := os.Getenv("COUNTER_HIT_GOLANG")
+	count, err := strconv.Atoi(flag)
 
 	if err != nil {
-		log.Println(err)
+		panic(err)
 	}
+
+	quick_math := count + 1
+	newValue := strconv.Itoa(quick_math)
+	os.Setenv("COUNTER_HIT_GOLANG", newValue)
+
+	return quick_math
 }
 
-func checker(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+func responder(w http.ResponseWriter, r *http.Request, b bool, s string) {
+	w.Header().Add("Content-Type", "application/json")
 
-	if len(r.Form["ipcheck"][0]) > 0 {
-		reply, err := connReach(r.Form["ipcheck"][0])
-		responder(w, r, true, reply)
+	status := 200
 
-		if err != nil {
-			log.Println(err)
-		}
-
-	} else if len(r.Form["mongodb"][0]) > 0 {
-
-		reply, err := mongodb(r.Form["mongodb"][0])
-		responder(w, r, true, reply)
-
-		if err != nil {
-			log.Println(err)
-		}
-
-	} else if len(r.Form["dns"][0]) > 0 {
-
-		reply, err := dnsResolver(r.Form["dns"][0])
-		responder(w, r, true, reply)
-
-		if err != nil {
-			log.Println(err)
-		}
-
-	} else {
-		responder(w, r, true, "Empty request")
+	if !b {
+		w.WriteHeader(http.StatusInternalServerError)
+		status = 500
 	}
+
+	pc, _, _, _ := runtime.Caller(1)
+	funcName := runtime.FuncForPC(pc).Name()
+	lastSlash := strings.LastIndexByte(funcName, '/')
+
+	if lastSlash < 0 {
+		lastSlash = 0
+	}
+
+	lastDot := strings.LastIndexByte(funcName[lastSlash:], '.') + lastSlash
+	calleIp := get_ip(r)
+	countHp := hit_counter(funcName[lastDot+1:])
+
+	mapD := response{
+		Endpoint: funcName[lastDot+1:],
+		Ip:       calleIp,
+		Counter:  countHp,
+		Status:   status,
+		Message:  s,
+	}
+
+	mapB, _ := json.Marshal(mapD)
+
+	w.Write(mapB)
+	log.Println(string(mapB))
 }
