@@ -1,19 +1,27 @@
-FROM golang:1.18
+FROM golang:1.18.0-alpine3.15
+
+ARG ELASTIC_URL
+ARG ELASTIC_TOKEN
 
 ENV API_GO_PATH="/go/src/github.com/apigo"
-
-USER 0
-RUN mkdir -p ${API_GO_PATH}
-COPY . ${API_GO_PATH}
-
+ENV ELASTIC_APM_SERVER_URL=${ELASTIC_URL}
+ENV ELASTIC_APM_SECRET_TOKEN=${ELASTIC_TOKEN}
+ENV HEALTCHECK_STATUS=true
 ENV COUNTER_HIT_GOLANG  0
+
+# USER 0
+RUN mkdir -p ${API_GO_PATH}
+RUN apk update
+RUN apk add git
+COPY . ${API_GO_PATH}
 
 WORKDIR ${API_GO_PATH}
 
+RUN go mod download
 RUN go build
-RUN chown -R 1001:0 ${API_GO_PATH}
+# RUN chown -R 1001:0 ${API_GO_PATH}
 
-USER 1001
-EXPOSE 8080
+# USER 1001
+# EXPOSE 8080
 
 CMD [ "./main" ]
