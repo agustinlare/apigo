@@ -3,10 +3,21 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 )
 
 func health(w http.ResponseWriter, r *http.Request) {
-	responder(w, r, true, "ok")
+	boolValue, err := strconv.ParseBool(os.Getenv("HEALTCHECK_STATUS"))
+	if err != nil {
+		log.Println(err)
+	}
+
+	if boolValue {
+		responder(w, r, true, "true")
+	} else {
+		responder(w, r, false, "false")
+	}
 }
 
 func unhealthy(w http.ResponseWriter, r *http.Request) {
@@ -17,9 +28,18 @@ func ping(w http.ResponseWriter, r *http.Request) {
 	responder(w, r, true, "pong")
 }
 
-func checklist(w http.ResponseWriter, r *http.Request) {
+func front(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "./static/index.html")
-	responder(w, r, true, "checklist")
+	responder(w, r, true, "front")
+}
+
+func switcher(w http.ResponseWriter, r *http.Request) {
+	reply, err := switchHealth()
+	responder(w, r, true, reply)
+
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func checker(w http.ResponseWriter, r *http.Request) {
