@@ -3,8 +3,6 @@ package main
 import (
 	"context"
 	"net"
-	"os"
-	"strconv"
 	"strings"
 	"time"
 
@@ -65,16 +63,4 @@ func dnsResolver(s string) (string, error) {
 	}
 
 	return reply, nil
-}
-
-func switchHealth() (string, error) {
-	boolValue, err := strconv.ParseBool(os.Getenv("HEALTCHECK_STATUS"))
-
-	if err != nil {
-		return "Error parsing variable", err
-	}
-
-	os.Setenv("HEALTCHECK_STATUS", strconv.FormatBool(!boolValue))
-
-	return "Switched", nil
 }

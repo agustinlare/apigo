@@ -4,9 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"os"
-	"runtime"
-	"strconv"
 	"strings"
 )
 
@@ -18,34 +15,7 @@ type response struct {
 	Message  string `json:"message"`
 }
 
-func get_ip(r *http.Request) string {
-	forwarded := r.Header.Get("X-FORWARDED-FOR")
-
-	if forwarded != "" {
-		return forwarded
-	}
-
-	return r.RemoteAddr
-}
-
-func hit_counter(endpoint string) int {
-	flag := os.Getenv("COUNTER_HIT_GOLANG")
-	count, err := strconv.Atoi(flag)
-
-	if err != nil {
-		panic(err)
-	}
-
-	quick_math := count + 1
-	newValue := strconv.Itoa(quick_math)
-	os.Setenv("COUNTER_HIT_GOLANG", newValue)
-
-	return quick_math
-}
-
 func responder(w http.ResponseWriter, r *http.Request, b bool, s string) {
-	w.Header().Add("Content-Type", "application/json")
-
 	status := 200
 
 	if !b {
@@ -53,20 +23,12 @@ func responder(w http.ResponseWriter, r *http.Request, b bool, s string) {
 		status = 500
 	}
 
-	pc, _, _, _ := runtime.Caller(1)
-	funcName := runtime.FuncForPC(pc).Name()
-	lastSlash := strings.LastIndexByte(funcName, '/')
-
-	if lastSlash < 0 {
-		lastSlash = 0
-	}
-
-	lastDot := strings.LastIndexByte(funcName[lastSlash:], '.') + lastSlash
-	calleIp := get_ip(r)
-	countHp := hit_counter(funcName[lastDot+1:])
+	callerUrl := r.URL.Path
+	calleIp := getIp(r)
+	countHp := hitCounter()
 
 	mapD := response{
-		Endpoint: funcName[lastDot+1:],
+		Endpoint: callerUrl,
 		Ip:       calleIp,
 		Counter:  countHp,
 		Status:   status,
@@ -75,6 +37,12 @@ func responder(w http.ResponseWriter, r *http.Request, b bool, s string) {
 
 	mapB, _ := json.Marshal(mapD)
 
-	w.Write(mapB)
 	log.Println(string(mapB))
+
+	exceptions := []string{"front", "password"}
+
+	if !stringInSlice(strings.TrimLeft(r.URL.Path, "/"), exceptions) {
+		w.Header().Add("Content-Type", "application/json")
+		w.Write(mapB)
+	}
 }

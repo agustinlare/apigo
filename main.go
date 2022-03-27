@@ -12,7 +12,7 @@ func handleRequests() {
 	http.HandleFunc("/ping", ping)
 	http.HandleFunc("/front", front)
 	http.HandleFunc("/checker", checker)
-	http.HandleFunc("/switcher", switcher)
+	http.HandleFunc("/password", rickroll)
 
 	fmt.Println("Server Up")
 	log.Fatal(http.ListenAndServe("0.0.0.0:8080", nil))
