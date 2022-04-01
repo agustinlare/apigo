@@ -2,18 +2,14 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>SRE AIO</title>
+        <title>APIGolang - agustinlare</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     </head>
     <body>
       <div class="jumbotron">
         <div class="container">
+          <h2>Connections</h2>
           <form action="/checker">
-            <h2>Connections</h2>
-            <!-- <div class="form-group">
-              <label>Name</label>
-              <input type="text" class="form-control" name="title" />
-            </div> -->
             <div class="form-group">
               <label for="ipcheck">IP Address reachability</label>
               <input type="text" name="ipcheck" class="form-control" id="ipcheck" placeholder="10.10.10.10 (default port 443) or 10.10.10.10:80  ">
@@ -30,6 +26,7 @@
           </form>
         </div>
       </div>
+      <!-- SWITCH HEALTH CHECK -->
       <div class="jumbotron">
         <div class="container">
           <form>
@@ -43,6 +40,21 @@
           </form>
         </div>
       </div>
+      <!-- STRESS TEST -->
+      <div class="container-fluid bg-light bk-light p-5">
+        <div class="container">
+          <form method="POST">
+            <h2>Stress test</h2>
+            <div class="mb-3">
+              <label for="formFile" class="form-label">Javascript request file</label>
+              <input class="form-control" type="file" id="formFile">
+              <br>
+              <button type="submit" name="uploadfile" value="uploadfile" class="btn btn-info">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- TARJETAS -->
       <div class="jumbotron">
         <div class="container">
           <h2>Other endpoints</h2>
