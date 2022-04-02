@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -63,4 +64,29 @@ func checker(w http.ResponseWriter, r *http.Request) {
 	} else {
 		responder(w, r, true, "Empty request")
 	}
+}
+
+func upload(w http.ResponseWriter, r *http.Request) {
+	r.ParseMultipartForm(10 << 20)
+
+	file, _, err := r.FormFile("file")
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	fileName := getFilenameDate()
+
+	tempFile, err := ioutil.TempFile("/tmp", fileName)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer tempFile.Close()
+
+	fileBytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	w.Write(fileBytes)
 }

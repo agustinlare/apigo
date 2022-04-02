@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 )
 
 func getIp(r *http.Request) string {
@@ -55,4 +56,12 @@ func stringInSlice(a string, list []string) bool {
 		}
 	}
 	return false
+}
+
+func getFilenameDate() string {
+	// Use layout string for time format.
+	const layout = "01-02-2006"
+	// Place now in the string.
+	t := time.Now()
+	return t.Format(layout) + ".js"
 }

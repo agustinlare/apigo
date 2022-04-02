@@ -43,14 +43,13 @@
       <!-- STRESS TEST -->
       <div class="container-fluid bg-light bk-light p-5">
         <div class="container">
-          <form method="POST">
-            <h2>Stress test</h2>
-            <div class="mb-3">
-              <label for="formFile" class="form-label">Javascript request file</label>
-              <input class="form-control" type="file" id="formFile">
-              <br>
-              <button type="submit" name="uploadfile" value="uploadfile" class="btn btn-info">Submit</button>
-            </div>
+          <h2>Stress test</h2>        
+          <form id="form" enctype="multipart/form-data" action="/upload" method="POST">
+            <label class="form-label">Javascript request file</label>
+            <br>
+            <input class="input file-input" type="file" name="file"/><br>
+            <br>
+            <button class="btn btn-info" type="submit">Submit</button>
           </form>
         </div>
       </div>
