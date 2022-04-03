@@ -26,33 +26,6 @@
           </form>
         </div>
       </div>
-      <!-- SWITCH HEALTH CHECK -->
-      <div class="jumbotron">
-        <div class="container">
-          <form>
-            <h2>Switch health response</h2>
-            <br>
-            {{ if .HealthStatus }}
-            <button type="submit" name="healthswitch" value="healthswitch" class="btn btn-success">Submit</button>
-            {{else}}
-            <button type="submit" name="healthswitch" value="healthswitch" class="btn btn-danger">Submit</button>
-            {{end}}
-          </form>
-        </div>
-      </div>
-      <!-- STRESS TEST -->
-      <div class="container-fluid bg-light bk-light p-5">
-        <div class="container">
-          <h2>Stress test</h2>        
-          <form id="form" enctype="multipart/form-data" action="/upload" method="POST">
-            <label class="form-label">Javascript request file</label>
-            <br>
-            <input class="input file-input" type="file" name="file"/><br>
-            <br>
-            <button class="btn btn-info" type="submit">Submit</button>
-          </form>
-        </div>
-      </div>
       <!-- TARJETAS -->
       <div class="jumbotron">
         <div class="container">
@@ -72,6 +45,7 @@
                 </div>
               </div>
             </div>
+            <!-- PING -->
             <div class="col-md-4">
               <div class="card mb-4 box-shadow">
                 <div class="card-body">
@@ -86,6 +60,7 @@
                 </div>
               </div>
             </div>
+            <!-- UNHEALTH -->
             <div class="col-md-4">
               <div class="card mb-4 box-shadow">
                 <div class="card-body">
@@ -100,6 +75,7 @@
                 </div>
               </div>
             </div>
+            <!-- PASSWORD -->
             <div class="col-md-4">
               <div class="card mb-4 box-shadow">
                 <div class="card-body">
@@ -114,6 +90,47 @@
                 </div>
               </div>
             </div>
+            <!-- STRESSTEST -->
+            <div class="col-md-4">
+              <div class="card mb-4 box-shadow">
+                <div class="card-body">
+                  <h4>Stress script</h4>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <div class="custom-input-file">
+                        <form id="form" enctype="multipart/form-data" action="/upload" method="POST">
+                          <input class="input file-input" type="file" name="file" /><br><br>
+                          <button type="submit" class="btn btn-sm btn-outline-secondary">Go</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Switch health check status -->
+            <div class="col-md-4">
+              <div class="card mb-4 box-shadow">
+                <div class="card-body">
+                  <h4>Switch Healthcheck</h4>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <div class="custom-input-file">
+                        <form>
+                          {{ if .HealthStatus }}
+                          <button name="healthswitch" value="healthswitch" class="btn btn-success btn-sm" disabled>Status</button><br>
+                          {{else}}
+                          <button name="healthswitch" value="healthswitch" class="btn btn-danger btn-sm" disabled>Status</button><br>
+                          {{end}}
+                          <br>
+                          <button type="submit"  name="healthswitch" value="healthswitch" class="btn btn-sm btn-outline-secondary">Go</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>    
           </div>
         </div>
       </div>
