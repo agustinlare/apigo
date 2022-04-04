@@ -20,5 +20,6 @@ func handleRequests() {
 }
 
 func main() {
+	hello()
 	handleRequests()
 }

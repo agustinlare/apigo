@@ -24,7 +24,8 @@ func ping(w http.ResponseWriter, r *http.Request) {
 }
 
 func rickroll(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 302)
+	x := 302
+	http.Redirect(w, r, "https://www.youtube.com/watch?v=dQw4w9WgXcQ", x)
 	responder(w, r, true, "Never gonna give you up!")
 }
 

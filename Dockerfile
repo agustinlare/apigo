@@ -1,4 +1,4 @@
-FROM golang:1.18.0-alpine3.15
+FROM golang:1.17.8-alpine3.15
 
 ARG ELASTIC_URL
 ARG ELASTIC_TOKEN
