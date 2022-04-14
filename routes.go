@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 )
 
 func health(w http.ResponseWriter, r *http.Request) {
@@ -80,14 +81,18 @@ func upload(w http.ResponseWriter, r *http.Request) {
 
 	tempFile, err := ioutil.TempFile("/tmp", fileName)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 	defer tempFile.Close()
 
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 
-	w.Write(fileBytes)
+	err = os.WriteFile("/tmp/"+fileName, fileBytes, 0644)
+	checkErr(err)
+
+	uploadFile("/tmp/" + fileName)
+	newPod()
 }

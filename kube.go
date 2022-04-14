@@ -18,7 +18,7 @@ func checkErr(e error) {
 	}
 }
 
-func hello() {
+func newPod() {
 	cfg, err := clientcmd.BuildConfigFromFlags(
 		"",
 		filepath.Join(homedir.HomeDir(), ".kube", "config"),
