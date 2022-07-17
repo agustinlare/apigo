@@ -20,5 +20,7 @@ func handleRequests() {
 }
 
 func main() {
+	// listECR()
+	initEnvs()
 	handleRequests()
 }

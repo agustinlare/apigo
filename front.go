@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"text/template"
 )
@@ -12,6 +12,7 @@ func outputHTML(w http.ResponseWriter, filename string, data interface{}) {
 		http.Error(w, err.Error(), 500)
 		return
 	}
+
 	if err := t.Execute(w, data); err != nil {
 		http.Error(w, err.Error(), 500)
 		return
@@ -20,9 +21,8 @@ func outputHTML(w http.ResponseWriter, filename string, data interface{}) {
 
 func front(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
-
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Println(err)
 	}
 
 	if r.Form["healthswitch"] != nil {

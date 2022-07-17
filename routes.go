@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -34,7 +33,7 @@ func checker(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Println(err)
 	}
 
 	if len(r.Form["ipcheck"][0]) > 0 {
@@ -72,27 +71,24 @@ func upload(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(10 << 20)
 
 	file, _, err := r.FormFile("file")
-
 	if err != nil {
-		log.Println(err)
+		responder(w, r, false, "Unable to find file")
 	}
 
 	fileName := getFilenameDate()
 
-	tempFile, err := ioutil.TempFile("/tmp", fileName)
-	if err != nil {
-		log.Println(err)
-	}
-	defer tempFile.Close()
-
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
-		log.Println(err)
+		responder(w, r, false, "Unable to read file")
 	}
 
 	err = os.WriteFile("/tmp/"+fileName, fileBytes, 0644)
-	checkErr(err)
+	if err != nil {
+		responder(w, r, false, "Unable to save file")
+	}
 
-	uploadFile("/tmp/" + fileName)
-	newPod()
+	err = uploadFile("/tmp/" + fileName)
+	if err != nil {
+		responder(w, r, false, "Unable to upload file")
+	}
 }

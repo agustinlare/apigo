@@ -11,7 +11,7 @@
             "mode": "auto",
             "program": "${fileDirname}",
             "env": {
-                "HEALTCHECK_STATUS": "true",
+                "HEALTHCHECK_STATUS": "true",
                 "COUNTER_HIT_GOLANG": "0"
             }
         }

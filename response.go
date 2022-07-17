@@ -44,5 +44,6 @@ func responder(w http.ResponseWriter, r *http.Request, b bool, s string) {
 	if !stringInSlice(strings.TrimLeft(r.URL.Path, "/"), exceptions) {
 		w.Header().Add("Content-Type", "application/json")
 		w.Write(mapB)
+		return
 	}
 }

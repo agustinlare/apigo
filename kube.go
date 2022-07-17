@@ -12,30 +12,20 @@ import (
 	"k8s.io/client-go/util/homedir"
 )
 
-func checkErr(e error) {
-	if e != nil {
-		log.Println(e)
-	}
-}
-
 func newPod() {
 	cfg, err := clientcmd.BuildConfigFromFlags(
 		"",
 		filepath.Join(homedir.HomeDir(), ".kube", "config"),
 	)
-	checkErr(err)
+
+	if err != nil {
+		log.Println(err)
+	}
 
 	k8s, err := kubernetes.NewForConfig(cfg)
-	checkErr(err)
-
-	// nsList, err := k8s.CoreV1().
-	// 	Namespaces().
-	// 	List(context.Background(), metav1.ListOptions{})
-	// checkErr(err)
-
-	// for _, n := range nsList.Items {
-	// 	fmt.Println(n.Name)
-	// }
+	if err != nil {
+		log.Println(err)
+	}
 
 	pod := &core.Pod{
 		ObjectMeta: metav1.ObjectMeta{
@@ -46,6 +36,17 @@ func newPod() {
 			},
 		},
 		Spec: core.PodSpec{
+			InitContainers: []core.Container{
+				{
+					Name:            "awscli ",
+					Image:           "amazon/aws-cli",
+					ImagePullPolicy: core.PullIfNotPresent,
+					Command: []string{
+						"sleep",
+						"3600",
+					},
+				},
+			},
 			Containers: []core.Container{
 				{
 					Name:            "busybox",
@@ -66,6 +67,8 @@ func newPod() {
 		metav1.CreateOptions{},
 	)
 
-	checkErr(err)
+	if err != nil {
+		log.Println(err)
+	}
 
 }

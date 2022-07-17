@@ -8,6 +8,18 @@ import (
 	"time"
 )
 
+func initEnvs() {
+	_, present := os.LookupEnv("HEALTHCHECK_STATUS")
+	if !present {
+		log.Fatal("Environments HEALTHCHECK_STATUS not set")
+	}
+
+	_, present = os.LookupEnv("COUNTER_HIT_GOLANG")
+	if !present {
+		log.Fatal("Environments COUNTER_HIT_GOLANG not set")
+	}
+}
+
 func getIp(r *http.Request) string {
 	forwarded := r.Header.Get("X-FORWARDED-FOR")
 
@@ -34,7 +46,7 @@ func hitCounter() int {
 }
 
 func getHealth() bool {
-	boolValue, err := strconv.ParseBool(os.Getenv("HEALTCHECK_STATUS"))
+	boolValue, err := strconv.ParseBool(os.Getenv("HEALTHCHECK_STATUS"))
 
 	if err != nil {
 		log.Println(err)
@@ -44,7 +56,7 @@ func getHealth() bool {
 }
 
 func switchHealth() string {
-	os.Setenv("HEALTCHECK_STATUS", strconv.FormatBool(!getHealth()))
+	os.Setenv("HEALTHCHECK_STATUS", strconv.FormatBool(!getHealth()))
 
 	return "Switched"
 }
@@ -59,9 +71,5 @@ func stringInSlice(a string, list []string) bool {
 }
 
 func getFilenameDate() string {
-	// Use layout string for time format.
-	const layout = "01-02-2006"
-	// Place now in the string.
-	t := time.Now()
-	return t.Format(layout) + ".js"
+	return time.Now().Format("20060102150405") + ".js"
 }
