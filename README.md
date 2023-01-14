@@ -1,6 +1,6 @@
 # ApiGo
 
-A simple API in `golang` that counts every hit.
+ Portal to do some custom things for work 
 
 ## Endpoints
 + `/health`: Status and message dependes on env.HEALTCHECK_STATUS
