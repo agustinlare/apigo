@@ -3,28 +3,21 @@ kind: Deployment
 metadata:
   annotations:
     deployment.kubernetes.io/revision: "3"
-    meta.helm.sh/release-name: dummy
-    meta.helm.sh/release-namespace: dummy-dev
-  creationTimestamp: "2022-07-11T17:14:17Z"
-  generation: 15
+    meta.helm.sh/release-name: apigo
+    meta.helm.sh/release-namespace: apigo-dev
   labels:
-    app.kubernetes.io/instance: dummy
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: dummy
-    helm.sh/chart: clave-ms-dev-1.0.28
-    kubernetes.io/cluster-name: clave-dev
-  name: dummy-deployment
-  namespace: dummy-dev
-  resourceVersion: "41446426"
-  uid: b39f20db-b822-4406-b78b-bab1f843683c
+    app.kubernetes.io/instance: apigo
+    app.kubernetes.io/name: apigo
+  name: apigo-deployment
+  namespace: apigo-dev
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app.kubernetes.io/instance: dummy
-      app.kubernetes.io/name: dummy
+      app.kubernetes.io/instance: apigo
+      app.kubernetes.io/name: apigo
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -34,38 +27,38 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        app.kubernetes.io/instance: dummy
-        app.kubernetes.io/name: dummy
+        app.kubernetes.io/instance: apigo
+        app.kubernetes.io/name: apigo
     spec:
       containers:
       - env:
         - name: ENVIRONMENT
           value: dev
         - name: PROJECT_NAME
-          value: dummy
+          value: apigo
         imagePullPolicy: Always
-        name: dummy
+        name: apigo
         ports:
         - containerPort: 8081
           protocol: TCP
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
-      - env:
-        image: gvalkov/tailon
-        command: ["ta"]
-        imagePullPolicy: Always
-        name: dummy
-        ports:
-        - containerPort: 8080
-          protocol: TCP
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
+      # - env:
+      #   image: gvalkov/tailon
+      #   command: ["ta"]
+      #   imagePullPolicy: Always
+      #   name: apigo
+      #   ports:
+      #   - containerPort: 8080
+      #     protocol: TCP
+      #   resources: {}
+      #   terminationMessagePath: /dev/termination-log
+      #   terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
-      serviceAccount: eks-iam-sa
-      serviceAccountName: eks-iam-sa
+      serviceAccount: default
+      serviceAccountName: default
       terminationGracePeriodSeconds: 30
